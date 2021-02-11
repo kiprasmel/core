@@ -69,6 +69,14 @@ class UwaveHttpApi extends Router {
       referrerPolicy: {
         policy: ['origin-when-cross-origin'],
       },
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["*", "'unsafe-inline'"],
+          scriptSrc: ["*", "'unsafe-inline'"],
+          styleSrc: ["*", "'unsafe-inline'"],
+          upgradeInsecureRequests: [],
+        },
+      },
     }));
 
     const corsOptions = {
