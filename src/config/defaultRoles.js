@@ -11,7 +11,8 @@ module.exports = {
     'motd.set',
   ],
   moderator: [
-    'user',
+    'special',
+    'producer',
     'waitlist.add',
     'waitlist.remove',
     'waitlist.move',
@@ -28,7 +29,7 @@ module.exports = {
     'users.bans.remove',
   ],
   producer: [
-    'user',
+    'special',
   ],
   special: [
     'user',
