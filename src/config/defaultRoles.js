@@ -27,6 +27,9 @@ module.exports = {
     'users.bans.add',
     'users.bans.remove',
   ],
+  producer: [
+    'user',
+  ],
   special: [
     'user',
   ],
