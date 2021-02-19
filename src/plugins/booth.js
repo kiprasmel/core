@@ -194,6 +194,7 @@ class Booth {
         userID: next.user.id,
         playlistID: next.playlist.id,
       });
+      this.uw.publish('user:play', { userID: next.user.id, artist: next.media.artist, title: next.media.title });
     } else {
       this.uw.publish('advance:complete', null);
     }
