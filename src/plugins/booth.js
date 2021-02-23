@@ -188,14 +188,16 @@ class Booth {
         playlistID: next.playlist.id,
         itemID: next.item.id,
         media: next.media,
-        playedAt: next.playedAt,
+        playedAt: next.playedAt
       });
+      
       this.uw.publish('playlist:cycle', {
         userID: next.user.id,
         playlistID: next.playlist.id,
       });
       this.uw.publish('user:play', { userID: next.user.id, artist: next.media.artist, title: next.media.title });
-    } else {
+    }
+    else {
       this.uw.publish('advance:complete', null);
     }
     this.uw.publish('waitlist:update', await this.getWaitlist());

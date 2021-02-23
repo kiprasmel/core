@@ -1,6 +1,7 @@
 'use strict';
 
 const debug = require('debug')('uwave:http-api:now');
+const _ = require('lodash');
 const { getBoothData } = require('./booth');
 const { serializePlaylist } = require('../utils/serialize');
 
@@ -31,9 +32,11 @@ async function getOnlineUsers(uw) {
     .select({
       activePlaylist: 0,
       exiled: 0,
-      level: 0,
+      points: 0,
       updatedAt: 0,
       __v: 0,
+      expDispenseCycles: 0,
+      lastExpDispense: 0
     })
     .lean();
 
@@ -80,10 +83,19 @@ async function getState(req) {
         throw err;
       });
   }
+  
+  //Delete unnecessary properties to avoid sending them for no reason
+  let cleanUser = {};
+  if(user != undefined){
+    cleanUser = _.omit(user.toObject(), ['expDispenseCycles', 'lastExpDispense', '__v']);
+  }
+  else{
+    cleanUser = user
+  }
 
   const stateShape = {
     motd,
-    user,
+    user: cleanUser,
     users,
     guests,
     roles,
