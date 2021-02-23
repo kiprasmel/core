@@ -184,7 +184,7 @@ class SocketServer {
             userID: next.userID,
             item: next.itemID,
             media: next.media,
-            playedAt: new Date(next.playedAt).getTime()
+            playedAt: new Date(next.playedAt).getTime(),
           });
         } else {
           this.broadcast('advance', null);
@@ -362,7 +362,7 @@ class SocketServer {
 
           this.broadcast('play', {
             user: user.toJSON(),
-            song: `${artist} - ${title}`
+            song: `${artist} - ${title}`,
           });
         }
       },
@@ -393,16 +393,20 @@ class SocketServer {
       /**
        * Broadcast a leveling up user.
        */
-      'user:levelup': ({user, nextLevel, levelupReward}) => {
+      'user:levelup': ({ user, nextLevel, levelupReward }) => {
         this.sendTo(user, 'userLevelUp', {
-            user: user,
-            previousLevel: user.level,
-            nextLevel: nextLevel,
-            levelupReward: levelupReward
+          user,
+          previousLevel: user.level,
+          nextLevel,
+          levelupReward,
         });
       },
-      'user:gain': ({user, exp, totalExp, points, totalPoints}) => {
-        this.sendTo(user, 'userGain', {user, exp, totalExp, points, totalPoints});
+      'user:gain': ({
+        user, exp, totalExp, points, totalPoints,
+      }) => {
+        this.sendTo(user, 'userGain', {
+          user, exp, totalExp, points, totalPoints,
+        });
       },
       /**
        * Force-close a connection.
@@ -635,18 +639,20 @@ class SocketServer {
       connection.send(command, data);
     });
   }
+
   /**
    * Return a list of online users
    *
    */
   getOnlineUsers() {
-    let users = [];
+    const users = [];
     this.connections.forEach((connection) => {
       users.push(connection.user);
     });
-    
+
     return users;
   }
+
   /**
    * Send a command to a single user.
    *
@@ -656,7 +662,7 @@ class SocketServer {
    */
   sendTo(user, command, data) {
     this.connections.forEach((connection) => {
-      if (connection.user && connection.user.id == user._id) {
+      if (connection.user && connection.user.id === user._id) {
         connection.send(command, data);
       }
     });

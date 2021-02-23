@@ -36,7 +36,7 @@ async function getOnlineUsers(uw) {
       updatedAt: 0,
       __v: 0,
       expDispenseCycles: 0,
-      lastExpDispense: 0
+      lastExpDispense: 0,
     })
     .lean();
 
@@ -83,14 +83,13 @@ async function getState(req) {
         throw err;
       });
   }
-  
-  //Delete unnecessary properties to avoid sending them for no reason
+
+  // Delete unnecessary properties to avoid sending them for no reason
   let cleanUser = {};
-  if(user != undefined){
+  if (user !== undefined) {
     cleanUser = _.omit(user.toObject(), ['expDispenseCycles', 'lastExpDispense', '__v']);
-  }
-  else{
-    cleanUser = user
+  } else {
+    cleanUser = user;
   }
 
   const stateShape = {
