@@ -641,28 +641,17 @@ class SocketServer {
   }
 
   /**
-   * Return a list of online users
-   *
-   */
-  getOnlineUsers() {
-    const users = [];
-    this.connections.forEach((connection) => {
-      users.push(connection.user);
-    });
-
-    return users;
-  }
-
-  /**
    * Send a command to a single user.
    *
-   * @param {Object} user User to send the command to.
+   * @param {Object|string} user User or user ID to send the command to.
    * @param {string} command Command name.
    * @param {*} data Command data.
    */
   sendTo(user, command, data) {
+    const userID = typeof user === 'object' ? user.id : user;
+
     this.connections.forEach((connection) => {
-      if (connection.user && connection.user.id === user._id) {
+      if (connection.user && connection.user.id === userID) {
         connection.send(command, data);
       }
     });

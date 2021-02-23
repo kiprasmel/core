@@ -5,8 +5,6 @@ const createDebug = require('debug');
 // eslint-disable-next-line no-unused-vars
 const debug = createDebug('uwave:leveling');
 
-const formatYmd = (date) => date.toISOString().slice(0, 10);
-
 const config = {
   exp: {
     dispenserMin: 5,
@@ -51,17 +49,30 @@ const config = {
 class Leveling {
   constructor(uw) {
     this.uw = uw;
+    this.dispenser = null;
   }
 
   async onStart() {
     // Actions that need to be done after uwave startup
     // automatically dispense EXP and PP every 5 minutes
-    setTimeout(this.dispenseExp, 30000, this.uw, this);
+    this.dispenser = setTimeout(
+      async () => this.dispenseExp(),
+      300000,
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this
   onStop() {
     // Actions that need to be done prior to shutdown
+  }
+
+  async getOnlineUsers() {
+    const { User } = this.uw.models;
+
+    const userIDs = await this.uw.redis.lrange('users', 0, -1);
+    const users = await User.find({ _id: { $in: userIDs } });
+
+    return users;
   }
 
   async gain(id, points, exp) {
@@ -94,17 +105,23 @@ class Leveling {
       user, exp, totalExp: user.exp, points, totalPoints: user.points,
     });
     await user.save();
+
+    this.dispenser = setTimeout(
+      async () => this.dispenseExp(),
+      300000,
+    );
   }
 
-  async dispenseExp(uwave, plugin) {
+  async dispenseExp() {
     const [waitlist, currentlyPlaying] = await Promise.all(
-      [uwave.booth.getWaitlist(), uwave.booth.getCurrentEntry()],
+      [this.uw.booth.getWaitlist(), this.uw.booth.getCurrentEntry()],
     );
+    const users = await this.getOnlineUsers();
 
-    uwave.socketServer.getOnlineUsers().forEach((user) => {
+    users.forEach(async (user) => {
       if (user !== undefined) {
-        if (user.lastExpDispense !== formatYmd(new Date())) {
-          user.lastExpDispense = formatYmd(new Date());
+        if (user.lastExpDispense !== Date.now()) {
+          user.lastExpDispense = Date.now();
           user.expDispenseCycles = 0;
         }
         if (user.expDispenseCycles < 71) {
@@ -123,17 +140,17 @@ class Leveling {
           );
 
           // if user is in waitlist, or is curretly playing - multiply reward by amount in config.
-          if (waitlist.includes(user.id) || currentlyPlaying.user === user.id) {
-            expToGive = Math.round(expToGive * config.exp.waitlistMultiplier);
-            pointsToGive = Math.round(pointsToGive * config.points.waitlistMultiplier);
+          if (currentlyPlaying) {
+            if (waitlist.includes(user.id) || currentlyPlaying.user === user.id) {
+              expToGive = Math.round(expToGive * config.exp.waitlistMultiplier);
+              pointsToGive = Math.round(pointsToGive * config.points.waitlistMultiplier);
+            }
           }
 
-          this.gain(user, pointsToGive, expToGive);
+          await this.gain(user, pointsToGive, expToGive);
         }
       }
     });
-
-    setTimeout(plugin.dispenseExp, 30000, uwave, plugin);
   }
 }
 
