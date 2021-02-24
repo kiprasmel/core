@@ -32,7 +32,6 @@ async function getOnlineUsers(uw) {
     .select({
       activePlaylist: 0,
       exiled: 0,
-      points: 0,
       updatedAt: 0,
       __v: 0,
       expDispenseCycles: 0,
