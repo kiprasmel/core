@@ -362,7 +362,7 @@ class SocketServer {
 
           this.broadcast('play', {
             user: user.toJSON(),
-            song: `${artist} - ${title}`
+            song: `${artist} - ${title}`,
           });
         }
       },
@@ -389,6 +389,21 @@ class SocketServer {
        */
       'user:unban': ({ moderatorID, userID }) => {
         this.broadcast('unban', { moderatorID, userID });
+      },
+      /**
+       * Broadcast a leveling up user.
+       */
+      'user:levelup': ({ userID, level }) => {
+        this.broadcast('levelup', {
+          userID, level,
+        });
+      },
+      'user:gain': ({
+        userID, exp, points,
+      }) => {
+        this.broadcast('gain', {
+          userID, exp, points,
+        });
       },
       /**
        * Force-close a connection.
