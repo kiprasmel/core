@@ -394,16 +394,12 @@ class SocketServer {
        * Broadcast a leveling up user.
        */
       'user:levelup': ({ userID, level }) => {
-        this.broadcast('levelup', {
-          userID, level,
-        });
+        this.sendTo(userID, 'levelup', { userID, level });
       },
       'user:gain': ({
         userID, exp, points,
       }) => {
-        this.broadcast('gain', {
-          userID, exp, points,
-        });
+        this.sendTo(userID, 'gain', { userID, exp, points });
       },
       /**
        * Force-close a connection.
