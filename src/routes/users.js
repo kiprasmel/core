@@ -81,12 +81,6 @@ function userRoutes() {
       '/:id/history',
       schema(validations.getUserHistory),
       route(controller.getHistory),
-    )
-    // GET /users/:id/dispense - Start Dispenser.
-    .get(
-      '/:id/dispense',
-      protect(),
-      route(controller.startDispenser),
     );
 }
 

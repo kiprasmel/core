@@ -108,17 +108,6 @@ async function removeUserRole(req) {
   });
 }
 
-async function startDispenser(req) {
-  const { id } = req.params;
-  const { leveling } = req.uwave;
-
-  await leveling.dispenseExp(id);
-
-  return toItemResponse({}, {
-    url: req.fullUrl,
-  });
-}
-
 async function changeUsername(req) {
   const { user: moderator } = req;
   const { id } = req.params;
@@ -193,4 +182,3 @@ exports.disconnectUser = disconnectUser;
 exports.getHistory = getHistory;
 exports.muteUser = muteUser;
 exports.unmuteUser = unmuteUser;
-exports.startDispenser = startDispenser;
