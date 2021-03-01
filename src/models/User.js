@@ -41,6 +41,9 @@ const userSchema = new Schema({
     required: [true, 'Usernames must not consist of punctuation only.'],
     index: true,
   },
+  discordId: {
+    type: String, unique: true, default: '', index: true,
+  },
   activePlaylist: {
     type: Types.ObjectId,
     ref: 'Playlist',

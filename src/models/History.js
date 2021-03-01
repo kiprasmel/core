@@ -29,6 +29,7 @@ const schema = new Schema({
     end: { type: Number, default: 0 },
   },
   playedAt: { type: Date, default: Date.now, index: true },
+  skipped: { type: Boolean, default: false },
   upvotes: listOfUsers,
   downvotes: listOfUsers,
   favorites: listOfUsers,
