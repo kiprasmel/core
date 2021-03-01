@@ -83,13 +83,6 @@ class Leveling {
       userID: `${user.id}`, exp: user.exp, points: user.points,
     });
     await user.save();
-
-    if (await this.isUserOnline(user.id)) {
-      setTimeout(
-        async () => this.dispenseExp(user.id),
-        300000,
-      );
-    }
   }
 
   async dispenseExp(userID) {
