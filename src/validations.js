@@ -540,6 +540,17 @@ exports.setUserName = {
   },
 };
 
+exports.setDiscordId = {
+  params: userParams,
+  body: {
+    type: 'object',
+    properties: {
+      discordId: { type: 'string' },
+    },
+    required: ['discordId'],
+  },
+};
+
 exports.setUserAvatar = {
   params: userParams,
   body: {

@@ -138,6 +138,25 @@ async function changeUsername(req) {
   }
 }
 
+async function changeDiscordId(req) {
+  const { user: moderator } = req;
+  const { id } = req.params;
+  const { discordId } = req.body;
+  const { users } = req.uwave;
+
+  try {
+    const user = await users.updateUser(
+      id,
+      { discordId },
+      { moderator },
+    );
+
+    return toItemResponse(user);
+  } catch (error) {
+    throw beautifyDuplicateKeyError(error);
+  }
+}
+
 async function changeAvatar() {
   throw new HTTPError(500, 'Not implemented');
 }
@@ -188,6 +207,7 @@ exports.getUserRoles = getUserRoles;
 exports.addUserRole = addUserRole;
 exports.removeUserRole = removeUserRole;
 exports.changeUsername = changeUsername;
+exports.changeDiscordId = changeDiscordId;
 exports.changeAvatar = changeAvatar;
 exports.disconnectUser = disconnectUser;
 exports.getHistory = getHistory;

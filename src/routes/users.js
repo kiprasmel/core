@@ -7,7 +7,7 @@ const protect = require('../middleware/protect');
 const schema = require('../middleware/schema');
 const rateLimit = require('../middleware/rateLimit');
 const controller = require('../controllers/users');
-const { NameChangeRateLimitError } = require('../errors');
+const { NameChangeRateLimitError, DiscordIdChangeRateLimitError } = require('../errors');
 
 function userRoutes() {
   return router()
@@ -75,6 +75,17 @@ function userRoutes() {
       protect(),
       schema(validations.setUserAvatar),
       route(controller.changeAvatar),
+    )
+    // PUT /users/:id/discordId - Change a user's Discord ID.
+    .put(
+      '/:id/discordId',
+      schema(validations.setDiscordId),
+      rateLimit('change-discordId', {
+        max: 1,
+        duration: 604800000,
+        error: DiscordIdChangeRateLimitError,
+      }),
+      route(controller.changeDiscordId),
     )
     // GET /users/:id/history - Show recent plays by a user.
     .get(

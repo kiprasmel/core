@@ -105,6 +105,12 @@ const NameChangeRateLimitError = createErrorClass('NameChangeRateLimitError', {
   base: RateLimitError,
 });
 
+const DiscordIdChangeRateLimitError = createErrorClass('DiscordIdChangeRateLimitError', {
+  code: 'too-many-requests',
+  string: 'errors.tooManyDiscordChanges',
+  base: RateLimitError,
+});
+
 const InvalidEmailError = createErrorClass('InvalidEmailError', {
   code: 'invalid-email',
   string: 'errors.invalidEmail',
@@ -174,6 +180,7 @@ exports.HTTPError = HTTPError;
 exports.PermissionError = PermissionError;
 exports.RateLimitError = RateLimitError;
 exports.NameChangeRateLimitError = NameChangeRateLimitError;
+exports.DiscordIdChangeRateLimitError = DiscordIdChangeRateLimitError;
 exports.InvalidEmailError = InvalidEmailError;
 exports.InvalidUsernameError = InvalidUsernameError;
 exports.UserNotFoundError = UserNotFoundError;
