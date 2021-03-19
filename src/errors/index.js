@@ -171,6 +171,12 @@ const SourceNoImportError = createErrorClass('SourceNoImportError', {
   base: NotFound,
 });
 
+const EmptyPlaylistError = createErrorClass('EmptyPlaylistError', {
+  code: 'empty-playlist',
+  string: 'errors.emptyPlaylist',
+  base: Forbidden,
+});
+
 exports.EmailError = EmailError;
 exports.APIError = APIError;
 exports.CombinedError = CombinedError;
@@ -191,3 +197,4 @@ exports.CannotSelfFavoriteError = CannotSelfFavoriteError;
 exports.CannotSelfMuteError = CannotSelfMuteError;
 exports.SourceNotFoundError = SourceNotFoundError;
 exports.SourceNoImportError = SourceNoImportError;
+exports.EmptyPlaylistError = EmptyPlaylistError;
