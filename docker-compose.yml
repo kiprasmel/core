@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  db:
+    image: mongo:4.4.6
+    ports:
+      - 8081:8081 # not sure; won't hurt
+      - 27017:27017
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine3.13
+    ports:
+      - 6379:6379
+    restart: unless-stopped
