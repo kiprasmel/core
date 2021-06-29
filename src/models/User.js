@@ -42,7 +42,7 @@ const userSchema = new Schema({
     index: true,
   },
   discordId: {
-    type: String, unique: false, default: '', index: true,
+    type: String, unique: false, default: '', index: false,
   },
   activePlaylist: {
     type: Types.ObjectId,
